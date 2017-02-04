@@ -1,0 +1,24 @@
+{
+    "name": "towerhouse/healthmeasures-laravel",
+    "description": "This library works as a laravel or lumen interface for the package towerhouse/healthmeasures.",
+    "type": "library",
+    "keywords": ["health", "data", "lumen", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucia Figueroa",
+            "email": "lucia.figueroa@towerhousestudio.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable" : true,
+    "require": {
+        "towerhouse/healthmeasures": "1.3.*",       
+        "illuminate/support": "5.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "HealthmeasuresLaravel\\Provider": "src/Provider"
+        }
+    }
+}
