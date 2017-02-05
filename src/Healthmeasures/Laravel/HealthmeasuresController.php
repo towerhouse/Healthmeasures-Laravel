@@ -2,6 +2,7 @@
 
 namespace Healthmeasures\Laravel;
 
+use App\Http\Controllers\Controller;
 use Healthmeasures\Measurement\Measure;
 use Healthmeasures\Measurement\Value;
 use Healthmeasures\Measurement\Stats;
@@ -31,7 +32,7 @@ class HealthmeasuresController extends Controller
     {
         $m = new Measure($measure_name, $measure_unit, $measure_lang);
         $m->save();
-        return response()->json(['data' => $m]);
+        return response()->json(['data' => $this->arraySingle($m)]);
     }
 
     /**
@@ -50,7 +51,7 @@ class HealthmeasuresController extends Controller
             $pathname = Input::getPathname();
             $m = new Measure();
             $collection = $m->bulkConstructor($pathname);
-            $response = response()->json(['data' => $collection]);
+            $response = response()->json(['data' => $this->arrayCollection($collection)]);
         } else {
             $response = response()->json(['id' => time(), 'status' => 400, 'title' => "csv file `$csv_file` is invalid"]);
         }
@@ -86,7 +87,7 @@ class HealthmeasuresController extends Controller
                 default:
                     $collection = $m->getAll();
             }
-            $response = response()->json(['data' => $collection]);
+            $response = response()->json(['data' => $this->arrayCollection($collection)]);
         } catch (\Exception $e) {
             $response = response()->json(['id' => time(), 'status' => 400, 'title' => $e->getMessage()]);
         }
@@ -102,8 +103,8 @@ class HealthmeasuresController extends Controller
     public function getMeasureById($id)
     {
         $m = new Measure();
-        $m->getMeasureById($id);
-        return response()->json(['data' => $m]);
+        $m->getById($id);
+        return response()->json(['data' => $this->arraySingle($m)]);
     }
 
     /** Value methods * */
@@ -120,7 +121,7 @@ class HealthmeasuresController extends Controller
     {
         $v = new Value($owner_id, $measure_id, $created_at, $value);
         $v->save();
-        return response()->json(['data' => $v]);
+        return response()->json(['data' => $this->arraySingle($v)]);
     }
 
     /**
@@ -135,13 +136,21 @@ class HealthmeasuresController extends Controller
             $pathname = Input::getPathname();
             $v = new Value();
             $collection = $v->bulkConstructor($pathname);
-            $response = response()->json(['data' => $collection]);
+            $response = response()->json(['data' => $this->arrayCollection($collection)]);
         } else {
             $response = response()->json(['id' => time(), 'status' => 400, 'title' => "csv file `$csv_file` is invalid"]);
         }
         return $response;
     }
 
+    public function getValues()
+    {
+        $v = new Value();
+        $collection = $v->getAll();
+        $response = response()->json(['data' => $this->arrayCollection($collection)]);
+        return $response;
+    }
+    
     /**
      * Returns a value given its id.
      * @param string $id
@@ -151,7 +160,7 @@ class HealthmeasuresController extends Controller
     {
         $v = new Value();
         $v->getById($id);
-        return response()->json(['data' => $v]);
+        return response()->json(['data' => $this->arraySingle($v)]);
     }
 
     /**
@@ -166,7 +175,7 @@ class HealthmeasuresController extends Controller
     {
         $v = new Value();
         $collection = $v->getValuesByDate($owner_id, $measure_id, $start, $end);
-        return response()->json(['data' => $collection]);
+        return response()->json(['data' => $this->arrayCollection($collection)]);
     }
 
     /** Stat methods * */
@@ -186,7 +195,7 @@ class HealthmeasuresController extends Controller
     public function setValuesAndGraph($owner_id, $measure_id, $start, $end = "now", $graph_title = "default", $graph_type = "linear", $graph_path = 'default')
     {
         $stats = $this->doSetValuesAndGraph($owner_id, $measure_id, $start, $end, $graph_title, $graph_type, $graph_path);
-        return response()->json(['data' => $stats]);
+        return response()->json(['data' => $this->arraySingle($stats)]);
     }
 
     /**
@@ -208,6 +217,13 @@ class HealthmeasuresController extends Controller
         $response['links']['report'] = $stats->getHtmlReport();
         return response()->json(['data' => $response]);
     }
+    
+    public function showReport($owner_id, $measure_id, $start, $end = "now", $graph_title = "default", $graph_type = "linear", $graph_path = 'default')
+    {
+        $stats = $this->doSetValuesAndGraph($owner_id, $measure_id, $start, $end, $graph_title, $graph_type, $graph_path);
+        header('Content-Type', 'html');
+        echo $stats->getHtmlReport();
+    }
 
     /** Auxiliar method **/
     protected function doSetValuesAndGraph($owner_id, $measure_id, $start, $end = "now", $graph_title = "default", $graph_type = "linear", $graph_path = 'default')
@@ -219,15 +235,34 @@ class HealthmeasuresController extends Controller
             $stats->title = $graph_title;
         }
 
-        if ($graph_path != 'default') {
-            $stats->image_path = storage_path(time() . '.jpg');
+        if ($graph_path == 'default') {
+            $stats->image_path = public_path("healthmeasures/" . $stats->getId() . '.jpg');
         }
 
         if (!file_exists($stats->image_path)) {
             $stats->generateDateMeasureGraph($graph_type);
         }
 
+        //Set public url image path
+        $stats->url_image_path = url("healthmeasures/" . basename($stats->image_path));
+
         return $stats;
+    }
+    
+    /** Helpers to encode data in json**/
+    
+    protected function arraySingle($o)
+    {
+        return $o->toArray();
+    }
+    
+    protected function arrayCollection($coll)
+    {
+        $newColl = [];
+        foreach ($coll as $o) {
+            $newColl[] = $o->toArray();
+        }
+        return $newColl;
     }
 
 }
