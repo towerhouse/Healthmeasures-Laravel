@@ -1,7 +1,7 @@
 {
     "name": "towerhouse/healthmeasures-laravel",
     "description": "This library works as a laravel or lumen interface for the package towerhouse/healthmeasures.",
-    "type": "library",
+    "type": "Laravel Provider",
     "keywords": ["health", "data", "lumen", "laravel"],
     "license": "MIT",
     "authors": [
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "HealthmeasuresLaravel\\Provider": "src/Provider"
+            "Healthmeasures\\Laravel": "src/Healthmeasures/Laravel/"
         }
     }
 }

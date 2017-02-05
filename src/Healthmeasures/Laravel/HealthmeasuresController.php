@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthmeasuresLaravel;
+namespace Healthmeasures\Laravel;
 
 use Healthmeasures\Measurement\Measure;
 use Healthmeasures\Measurement\Value;
