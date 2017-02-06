@@ -34,6 +34,12 @@ Call a url as declared on healthmeasures-routes.php for instance, if (your vhost
 http://mbhealth-api.local/healthmeasures/measure
 and it will render all the measures from the database
 
+### Html report generation
+
+- Laravel: php artisan vendor:publish
+- Lumen or Laravel: create the folder resources/views/healthmeasures/ and copy by hand report.blade.php inside there.
+Then you are free to modify the view.
+
 ### Lumen provider
 
 During the implementation of this package I found some difficulties that I documented here:

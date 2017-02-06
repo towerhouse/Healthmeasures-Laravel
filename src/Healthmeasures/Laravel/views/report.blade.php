@@ -152,7 +152,7 @@
                  </tr>
                  <tr>
                     <td class="em">Generated with:</td>
-                    <td><a href="https://github.com/towerhouse/Healthmeasures">HealtMeasures by THS</a></td>
+                    <td><a href="https://github.com/towerhouse/Healthmeasures">HealthMeasures by THS</a></td>
                  </tr>
               </tbody>
            </table>
