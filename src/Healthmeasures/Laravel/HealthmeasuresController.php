@@ -198,31 +198,22 @@ class HealthmeasuresController extends Controller
         return response()->json(['data' => $this->arraySingle($stats)]);
     }
 
-    /**
-     * Returns a stats response with all the properties for a graph including the
-     * path where the graph was stored and a string with an html report
-     * @param string $owner_id
-     * @param string $measure_id
-     * @param string $start
-     * @param string $end
-     * @param string $graph_title
-     * @param string $graph_type
-     * @param string $graph_path
-     * @return json
-     */
-    public function setValuesAndReport($owner_id, $measure_id, $start, $end = "now", $graph_title = "default", $graph_type = "linear", $graph_path = 'default')
-    {
-        $stats = $this->doSetValuesAndGraph($owner_id, $measure_id, $start, $end, $graph_title, $graph_type, $graph_path);
-        $response = $stats->toArray();
-        $response['links']['report'] = $stats->getHtmlReport();
-        return response()->json(['data' => $response]);
-    }
     
     public function showReport($owner_id, $measure_id, $start, $end = "now", $graph_title = "default", $graph_type = "linear", $graph_path = 'default')
     {
         $stats = $this->doSetValuesAndGraph($owner_id, $measure_id, $start, $end, $graph_title, $graph_type, $graph_path);
-        header('Content-Type', 'html');
-        echo $stats->getHtmlReport();
+        $all = $stats->getCompleteStatsInformation();
+        $date_values = $all['Data Table'];
+        unset($all['Data Table']);
+        
+        $view_data = [
+            'report_title' => $stats->getTitle(),
+            'graph_image' => $stats->getPreferredImagePath(),
+            'rows_stat' => $all,
+            'rows_data' => $date_values,
+        ];
+        
+        return response(view('healthmeasures::report', $view_data))->header('Content-Type', 'html');
     }
 
     /** Auxiliar method **/

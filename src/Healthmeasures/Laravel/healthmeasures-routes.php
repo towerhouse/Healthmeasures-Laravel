@@ -55,11 +55,7 @@ $app->group(['prefix' => 'healthmeasures'], function() use ($app)
     $app->get('stats/graph/{owner_id}/{measure_id}/{start}/{end}/{graph_title}/{graph_type}/{graph_path}', [
         'as' => 'setValuesAndGraph', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@setValuesAndGraph'
     ]);
-    
-    $app->get('stats/report/{owner_id}/{measure_id}/{start}/{end}/{graph_title}/{graph_type}/{graph_path}', [
-        'as' => 'setValuesAndReport', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@setValuesAndReport'
-    ]);    
-    
+        
     $app->get('stats/report/html/{owner_id}/{measure_id}/{start}/{end}/{graph_title}/{graph_type}/{graph_path}', [
         'as' => 'showReport', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@showReport'
     ]);  
