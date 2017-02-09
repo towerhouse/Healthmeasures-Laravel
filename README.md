@@ -1,5 +1,7 @@
 # Health Measures Laravel Provider
 
+(Unstable, it has not being tested with unit testing yet)
+
 [![towerhousestudio](http://towerhousestudio.com/wp-content/uploads/2016/04/nuevo-logo-towerhouse2-1s-300x296.png)](http://towerhousestudio.com)
 
 - This is a laravel/lumen provider for the library https://github.com/towerhouse/Healthmeasures
