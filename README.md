@@ -34,6 +34,10 @@ Call a url as declared on healthmeasures-routes.php for instance, if (your vhost
 http://mbhealth-api.local/healthmeasures/measure
 and it will render all the measures from the database
 
+### Test
+
+There are unit tests for each action except for the upload files actions. I have not find a way to do them yet.
+
 ### Html report generation
 
 - Laravel: php artisan vendor:publish

@@ -28,12 +28,7 @@ class HealthmeasuresServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        /*$this->publishes([
-            __DIR__.'/../healthmeasures/config/database.php' => config_path('healthmeasures-database.php'),
-            __DIR__.'/../healthmeasures/config/htmlReport.php' => config_path('healthmeasures-htmlReport.php'),
-        ]);*/
-        
+    {        
         $this->loadViewsFrom(__DIR__ . '/views', 'healthmeasures');
         $this->publishes([
             __DIR__ . '/views' => base_path('resources/views/healthmeasures'),

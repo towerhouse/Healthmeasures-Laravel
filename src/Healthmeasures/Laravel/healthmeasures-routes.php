@@ -17,35 +17,37 @@ $app = app();
 
 $app->group(['prefix' => 'healthmeasures'], function() use ($app)
 {
-    $app->group(['middleware' => 'auth'], function () use ($app) {
         
-        $app->post('measure', [
-            'as' => 'saveMeasure', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveMeasure'
-        ]);
-
-        $app->post('measure/bulk', [
-            'as' => 'saveBulkMeasures', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveBulkMeasures'
-        ]);
-        
-        $app->post('value', [
-            'as' => 'saveValue', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveMeasure'
-        ]);
-
-        $app->post('value/bulk', [
-            'as' => 'saveBulkValues', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveBulkMeasures'
-        ]);
-    });
-    
-    $app->get('measure', [
-        'as' => 'getMeasures', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@getMeasures'
+    $app->post('measure', [
+        'as' => 'saveMeasure', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveMeasure'
     ]);
-    
+        
+    $app->post('measure/bulk/{lang}', [
+        'as' => 'saveBulkMeasures', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveBulkMeasures'
+    ]);
+
     $app->get('measure/{id}', [
         'as' => 'getMeasureById', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@getMeasureById'
     ]);
-    
+        
+    $app->get('measure/{keyword}/{criteria}', [
+        'as' => 'getMeasures', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@getMeasures'
+    ]);
+        
+    $app->post('value', [
+        'as' => 'saveValue', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveValue'
+    ]);
+
+    $app->post('value/bulk', [
+        'as' => 'saveBulkValues', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@saveBulkMeasures'
+    ]);
+                    
     $app->get('value', [
         'as' => 'getValues', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@getValues'
+    ]);
+    
+    $app->get('value/date/{owner_id}/{measure_id}/{start}/{end}', [
+        'as' => 'getValues', 'uses' => 'Healthmeasures\Laravel\HealthmeasuresController@getValuesByDate'
     ]);
     
     $app->get('value/{id}', [
