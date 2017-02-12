@@ -36,9 +36,13 @@ Call a url as declared on healthmeasures-routes.php for instance, if (your vhost
 http://mbhealth-api.local/healthmeasures/measure
 and it will render all the measures from the database
 
-### Test
+### Tests
 
-There are unit tests for each action except for the upload files actions. I have not find a way to do them yet.
+There are unit tests for each action except for the upload files actions. I have not found a way to do them yet.
+
+### ToDos
+
+Limit with query parameters the number of results (pagination)
 
 ### Html report generation
 
